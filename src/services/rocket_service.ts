@@ -1,6 +1,21 @@
 import { URLS } from "@/utils/urls"
 import { fetchClient } from "./api_handler"
 
+export async function createRocket (data: Record<string, unknown>) {
+  try {
+    const header = {
+      'Content-Type': 'application/json',
+      'spacex-key': 'spacex-key'
+    }
+
+    const response = await fetchClient(header).post(URLS.BASE_ROCKETS, data)
+
+    return response
+  } catch (error: unknown) {
+    return error
+  }
+}
+
 export async function getDataRocket () {
   try {
     const header = {

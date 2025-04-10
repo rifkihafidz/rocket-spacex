@@ -1,22 +1,43 @@
 <template>
-  <div
-    class="d-flex flex-column"
+  <v-row
+    class="py-2"
     style="max-height: 70vh; overflow-y: auto"
   >
-    <v-btn
+    <v-col
       v-for="item in rockets"
       :key="item.id"
-      variant="text"
-      class="text-capitalize"
-      :to="`/detail/${item.id}`"
+      cols="12"
+      sm="6"
+      md="4"
     >
-      {{ item.name }}
-    </v-btn>
-  </div>
+      <v-card
+        :to="`/detail/${item.id}`"
+      >
+        <v-img
+          :src="item.image"
+          height="200px"
+          cover
+        />
+
+        <v-card-title class="text-capitalize">
+          {{ item.name }}
+        </v-card-title>
+
+        <v-card-text class="text-justify">
+          {{ item.description }}
+        </v-card-text>
+      </v-card>
+    </v-col>
+  </v-row>
 </template>
 
 <script setup lang="ts">
 defineProps<{
-  rockets: Array<{ id: string; name: string }>;
+  rockets: Array<{
+    id: string;
+    name: string;
+    image: string;
+    description: string;
+  }>;
 }>();
 </script>

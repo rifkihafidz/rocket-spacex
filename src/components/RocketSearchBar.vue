@@ -6,7 +6,7 @@
     density="comfortable"
     :disabled="disabled"
     :maxlength="100"
-    placeholder="Search Rocket Name"
+    :placeholder="disabled ? 'Create Rocket First' : 'Search Rocket Name'"
     single-line
     variant="outlined"
     hide-details

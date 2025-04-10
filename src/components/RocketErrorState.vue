@@ -1,7 +1,7 @@
 <template>
-  <v-sheet class="d-flex flex-column align-center pa-6 rounded-lg elevation-2">
+  <v-sheet class="d-flex flex-column align-center pa-6 rounded-lg">
     <p class="mb-4 text-white">
-      ⚠️ {{ message || "Failed to get rocket data." }}
+      ⚠️ Failed to get rocket data.
     </p>
     <v-btn
       color="white"
@@ -14,9 +14,6 @@
 </template>
 
 <script setup lang="ts">
-defineProps<{
-  message?: string;
-}>();
 const emit = defineEmits<{
   (e: "retry"): void;
 }>();

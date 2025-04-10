@@ -8,7 +8,7 @@
     </h1>
 
     <v-progress-circular
-      v-if="isLoading"
+      v-if="isGetListLoading"
       class="mt-6"
       color="primary"
       size="48"
@@ -16,17 +16,20 @@
     />
 
     <div
-      v-else-if="isSuccess"
+      v-else-if="isGetListSuccess"
       class="d-flex flex-column align-center w-100"
     >
       <v-btn
         variant="outlined"
         class="text-capitalize"
+        :loading="isCreateLoading"
+        @click="rocketStore.createRocket"
       >
         Create Rocket
       </v-btn>
 
       <RocketSearchBar
+        :key="rocketStore.key"
         v-model="rocketStore.keywordSearch"
         :disabled="
           rocketStore.filteredDataRocket.length < 1 &&
@@ -37,7 +40,12 @@
 
       <RocketItemList
         v-if="rocketStore.filteredDataRocket.length > 0"
-        :rockets="rocketStore.filteredDataRocket"
+        :rockets="rocketStore.filteredDataRocket.map((rocket) => ({
+          id: rocket.id,
+          name: rocket.name,
+          image: rocket.flickr_images[0],
+          description: rocket.description,
+        }))"
       />
 
       <RocketEmptyState
@@ -52,6 +60,12 @@
       @retry="rocketStore.getDataRocket"
     />
   </v-container>
+
+  <CustomSnackbar
+    v-model="rocketStore.snackbarShown"
+    :message="rocketStore.snackbarMessage"
+    :color="rocketStore.snackbarColor"
+  />
 </template>
 
 <script setup lang="ts">
@@ -59,6 +73,7 @@ import { onMounted, computed } from "vue";
 import { useRocketStore } from "@/stores/rocket_store";
 import { RequestStatus } from "@/utils/const";
 
+import CustomSnackbar from "@/components/CustomSnackbar.vue";
 import RocketEmptyState from "@/components/RocketEmptyState.vue";
 import RocketErrorState from "@/components/RocketErrorState.vue";
 import RocketItemList from "@/components/RocketItemList.vue";
@@ -66,13 +81,19 @@ import RocketSearchBar from "@/components/RocketSearchBar.vue";
 
 const rocketStore = useRocketStore();
 
-const isLoading = computed(() =>
+const isCreateLoading = computed(() =>
+  [RequestStatus.Loading].includes(
+    rocketStore.statusCreateRocket
+  )
+);
+
+const isGetListLoading = computed(() =>
   [RequestStatus.Initial, RequestStatus.Loading].includes(
     rocketStore.statusGetListDataRocket
   )
 );
 
-const isSuccess = computed(
+const isGetListSuccess = computed(
   () => rocketStore.statusGetListDataRocket === RequestStatus.Success
 );
 
