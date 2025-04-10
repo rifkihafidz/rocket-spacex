@@ -3,7 +3,7 @@
     v-model="model"
     :color="color"
     multi-line
-    :timeout="1250"
+    :timeout="1500"
     @close="onClose"
   >
     {{ message }}

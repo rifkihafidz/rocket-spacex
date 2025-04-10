@@ -1,48 +1,37 @@
 import { URLS } from "@/utils/urls"
 import { fetchClient } from "./api_handler"
 
-export async function createRocket (data: Record<string, unknown>) {
+const defaultHeader = {
+  'Content-Type': 'application/json',
+}
+
+const authHeader = {
+  ...defaultHeader,
+  'spacex-key': 'spacex-key'
+}
+
+export async function createRocket(data: Record<string, unknown>) {
   try {
-    const header = {
-      'Content-Type': 'application/json',
-      'spacex-key': 'spacex-key'
-    }
-
-    const response = await fetchClient(header).post(URLS.BASE_ROCKETS, data)
-
+    const response = await fetchClient(authHeader).post(URLS.BASE_ROCKETS, data)
     return response
   } catch (error: unknown) {
     return error
   }
 }
 
-export async function getDataRocket () {
+export async function getDataRocket() {
   try {
-    const header = {
-      'Content-Type': 'application/json',
-    }
-
-    const response = await fetchClient(header).get(URLS.BASE_ROCKETS)
-
-    const jsonResponse = await response.json()
-
-    return jsonResponse
+    const response = await fetchClient(defaultHeader).get(URLS.BASE_ROCKETS)
+    return await response.json()
   } catch (error: unknown) {
     return error
   }
 }
 
-export async function getDetailRocket (id: string) {
+export async function getDetailRocket(id: string) {
   try {
-    const header = {
-      'Content-Type': 'application/json',
-    }
-
-    const response = await fetchClient(header).get(URLS.BASE_ROCKETS + `/${id}`)
-
-    const jsonResponse = await response.json()
-
-    return jsonResponse
+    const response = await fetchClient(defaultHeader).get(`${URLS.BASE_ROCKETS}/${id}`)
+    return await response.json()
   } catch (error: unknown) {
     return error
   }

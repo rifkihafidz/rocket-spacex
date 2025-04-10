@@ -1,7 +1,7 @@
 <template>
   <v-text-field
     v-model="model"
-    class="my-4"
+    class="my-6"
     prepend-inner-icon="mdi-magnify"
     density="comfortable"
     :disabled="disabled"

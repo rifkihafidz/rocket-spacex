@@ -1,26 +1,21 @@
-export const fetchClient = (
-  header: Record<string, string> | null = null,
-  timeout: number | null = null
-) => {
-  const defaultHeaders = header || {
-    'Content-Type': 'application/json',
-    Authorization: `Bearer ${localStorage.getItem('authToken')}`,
-  }
-
+export const fetchClient = (header: Record<string, string> | null = null) => {
   const requestHandler = async (
     url: string,
     options: RequestInit
   ): Promise<Response | never> => {
     try {
       const controller = new AbortController()
-      const timeoutId = setTimeout(() => controller.abort(), timeout || 10000)
+      const timeoutId = setTimeout(() => controller.abort(), 10000)
+      const isFormData = options.body instanceof FormData
+
+      const combinedHeaders = isFormData
+        ? header ?? undefined
+        : { ...(header ?? {}), ...(options.headers ?? {}) }
+
 
       const response = await fetch(url, {
         ...options,
-        headers: {
-          ...defaultHeaders,
-          ...(options.body instanceof FormData ? {} : options.headers),
-        },
+        headers: combinedHeaders,
         signal: controller.signal,
       })
 
@@ -46,42 +41,28 @@ export const fetchClient = (
   }
 
   return {
-    get: (url: string, config: RequestInit = {}): Promise<Response> =>
-      requestHandler(url, { method: 'GET', ...config }),
+    get: (url: string,) =>
+      requestHandler(url, { method: 'GET' }),
 
     post: (
       url: string,
       data: Record<string, unknown>,
-      config: RequestInit = {}
-    ): Promise<Response> => {
-      return requestHandler(url, {
+    ) =>
+      requestHandler(url, {
         method: 'POST',
         body: JSON.stringify(data),
-        headers: {
-          'Content-Type': 'application/json',
-          ...config.headers,
-        },
-        ...config,
-      })
-    },
+      }),
 
     put: (
       url: string,
       data: Record<string, unknown>,
-      config: RequestInit = {}
-    ): Promise<Response> => {
-      return requestHandler(url, {
+    ) =>
+      requestHandler(url, {
         method: 'PUT',
         body: JSON.stringify(data),
-        headers: {
-          'Content-Type': 'application/json',
-          ...config.headers,
-        },
-        ...config,
-      })
-    },
+      }),
 
-    delete: (url: string, config: RequestInit = {}): Promise<Response> =>
-      requestHandler(url, { method: 'DELETE', ...config }),
+    delete: (url: string) =>
+      requestHandler(url, { method: 'DELETE' }),
   }
 }

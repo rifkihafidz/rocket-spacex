@@ -1,7 +1,7 @@
 <template>
   <v-row
     class="py-2"
-    style="max-height: 70vh; overflow-y: auto"
+    style="max-height: 75vh; overflow-y: auto"
   >
     <v-col
       v-for="item in rockets"
