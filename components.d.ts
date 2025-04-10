@@ -9,6 +9,10 @@ declare module 'vue' {
   export interface GlobalComponents {
     HelloWorld: typeof import('./src/components/HelloWorld.vue')['default']
     NotFound: typeof import('./src/components/NotFound.vue')['default']
+    RocketEmptyState: typeof import('./src/components/RocketEmptyState.vue')['default']
+    RocketErrorState: typeof import('./src/components/RocketErrorState.vue')['default']
+    RocketItemList: typeof import('./src/components/RocketItemList.vue')['default']
+    RocketSearchBar: typeof import('./src/components/RocketSearchBar.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
   }
